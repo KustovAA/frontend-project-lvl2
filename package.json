@@ -21,7 +21,8 @@
   },
   "homepage": "https://github.com/KustovAA/frontend-project-lvl2#readme",
   "dependencies": {
-    "commander": "^6.2.1"
+    "commander": "^6.2.1",
+    "lodash": "^4.17.20"
   },
   "devDependencies": {
     "eslint": "^7.16.0",
