@@ -1,8 +1,11 @@
 import { promises as fs } from 'fs';
+import path from 'path';
 import _ from 'lodash';
 
 const genDiff = async (filepath1, filepath2) => {
-  const files = await Promise.all([fs.readFile(filepath1, 'utf-8'), fs.readFile(filepath2, 'utf-8')]);
+  const path1 = path.resolve(process.cwd(), filepath1);
+  const path2 = path.resolve(process.cwd(), filepath2);
+  const files = await Promise.all([fs.readFile(path1, 'utf-8'), fs.readFile(path2, 'utf-8')]);
   const [file1, file2] = files.map((file) => JSON.parse(file));
   const result = ['', '{'];
 
@@ -23,7 +26,7 @@ const genDiff = async (filepath1, filepath2) => {
     }
   });
 
-  result.push('}');
+  result.push('}', '');
 
   return result.join('\n');
 };
