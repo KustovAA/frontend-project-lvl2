@@ -1,8 +1,0 @@
-
-Property 'exclude' was removed
-Property 'follow' was removed
-Property 'module' was updated. From 'commonjs' to 'es6'
-Property 'proxy' was removed
-Property 'sourceMap' was updated. From true to false
-Property 'timeout' was updated. From 50 to 20
-Property 'verbose' was added with value: true

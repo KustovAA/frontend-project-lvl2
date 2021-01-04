@@ -55,6 +55,7 @@ const plain = (actions) => [''].concat(actions.map((action) => plainMapping[acti
 const formats = {
   stylish,
   plain,
+  json: (val) => '\n'.concat(JSON.stringify(val)).concat('\n'),
 };
 
 const createFormatter = (format) => formats[format];
