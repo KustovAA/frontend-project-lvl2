@@ -2,7 +2,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import _ from 'lodash';
 import yaml from 'js-yaml';
-import formats from './formats.js';
+import createFormatter from './formats.js';
 
 const parserMap = {
   json: (file) => JSON.parse(file),
@@ -55,7 +55,8 @@ const getDiffList = (obj1, obj2) => {
 const genDiff = async (filepath1, filepath2, format) => {
   const { file1, file2 } = await readFiles(filepath1, filepath2, format);
   const diffList = getDiffList(file1, file2);
-  return formats[format](diffList);
+  const formatter = createFormatter(format);
+  return formatter(diffList);
 };
 
 export default genDiff;
