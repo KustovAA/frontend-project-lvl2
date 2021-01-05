@@ -12,7 +12,7 @@ const stylishMapping = {
     if (_.isPlainObject(value)) {
       return ['{']
         .concat(
-          _.sortBy(_.keys(value))
+          _.keys(value)
             .map((key) => stylishMapping.unchanged({ key, value: value[key] }, depth + indent * 2)),
         )
         .concat([`${' '.repeat(depth)}  }`])
