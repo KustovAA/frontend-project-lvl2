@@ -52,7 +52,7 @@ const getDiffList = (obj1, obj2) => {
   });
 };
 
-const genDiff = (filepath1, filepath2, format) => {
+const genDiff = (filepath1, filepath2, format = 'stylish') => {
   const { file1, file2 } = readFiles(filepath1, filepath2, format);
   const diffList = getDiffList(file1, file2);
   const formatter = createFormatter(format);
