@@ -1,7 +1,7 @@
 import { test, expect } from '@jest/globals';
 import fs from 'fs';
 import path from 'path';
-import genDiff from '../src/index.js';
+import genDiff from '../index.js';
 
 describe('compare objects json', () => {
   const filepath1 = '__fixtures__/file1.json';

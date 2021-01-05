@@ -55,7 +55,7 @@ const plain = (actions) => actions.map((action) => plainMapping[action.type](act
 const formats = {
   stylish,
   plain,
-  json: JSON.stringify,
+  json: (val) => JSON.stringify(val),
 };
 
 const createFormatter = (format) => formats[format];
