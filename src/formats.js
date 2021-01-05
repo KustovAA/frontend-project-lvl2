@@ -23,11 +23,11 @@ const stylishMapping = {
   },
 };
 
-const stylish = (actions) => ['', '{'].concat(actions.map(({
+const stylish = (actions) => ['{'].concat(actions.map(({
   type, key, value, oldValue, newValue, keys,
 }) => stylishMapping[type]({
   key, value, oldValue, newValue, keys, type,
-}))).concat(['}', '']).flat(Infinity).join('\n');
+}))).concat(['}']).flat(Infinity).join('\n');
 
 const plainMapping = {
   unchanged: () => [],
@@ -50,12 +50,12 @@ const plainMapping = {
   },
 };
 
-const plain = (actions) => [''].concat(actions.map((action) => plainMapping[action.type](action))).concat(['']).flat(Infinity).join('\n');
+const plain = (actions) => actions.map((action) => plainMapping[action.type](action)).flat(Infinity).join('\n');
 
 const formats = {
   stylish,
   plain,
-  json: (val) => '\n'.concat(JSON.stringify(val)).concat('\n'),
+  json: JSON.stringify,
 };
 
 const createFormatter = (format) => formats[format];
