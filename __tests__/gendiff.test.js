@@ -3,48 +3,19 @@ import fs from 'fs';
 import path from 'path';
 import genDiff from '../index.js';
 
-describe('compare objects json', () => {
-  const filepath1 = '__fixtures__/file1.json';
-  const filepath2 = '__fixtures__/file2.json';
+describe.each(['json', 'yml'])('compare objects %s', (ext) => {
+  const filepath1 = path.join('__fixtures__', `file1.${ext}`);
+  const filepath2 = path.join('__fixtures__', `file2.${ext}`);
 
-  test('plain', async () => {
-    const expected = fs.readFileSync(path.resolve(process.cwd(), '__fixtures__/result-plain.txt'), 'utf-8').trim();
-    const actual = genDiff(filepath1, filepath2, 'plain');
+  test.each(['plain', 'stylish', 'json'])('%s', async (format) => {
+    const expected = fs.readFileSync(path.resolve(process.cwd(), path.join('__fixtures__', `result-${format}.txt`)), 'utf-8').trim();
+    const actual = genDiff(filepath1, filepath2, format);
     expect(actual).toBe(expected);
   });
 
-  test('stylish', async () => {
-    const expected = fs.readFileSync(path.resolve(process.cwd(), '__fixtures__/result-stylish.txt'), 'utf-8').trim();
-    const actual = genDiff(filepath1, filepath2, 'stylish');
-    expect(actual).toBe(expected);
-  });
-
-  test('json', async () => {
-    const expected = fs.readFileSync(path.resolve(process.cwd(), '__fixtures__/result-json.txt'), 'utf-8').trim();
-    const actual = genDiff(filepath1, filepath2, 'json');
-    expect(actual).toBe(expected);
-  });
-});
-
-describe('compare objects yaml', () => {
-  const filepath1 = '__fixtures__/file1.yml';
-  const filepath2 = '__fixtures__/file2.yml';
-
-  test('stylish', async () => {
-    const expected = await fs.readFileSync(path.resolve(process.cwd(), '__fixtures__/result-stylish.txt'), 'utf-8').trim();
-    const actual = await genDiff(filepath1, filepath2, 'stylish');
-    expect(actual).toBe(expected);
-  });
-
-  test('plain', async () => {
-    const expected = fs.readFileSync(path.resolve(process.cwd(), '__fixtures__/result-plain.txt'), 'utf-8').trim();
-    const actual = genDiff(filepath1, filepath2, 'plain');
-    expect(actual).toBe(expected);
-  });
-
-  test('json', async () => {
-    const expected = fs.readFileSync(path.resolve(process.cwd(), '__fixtures__/result-json.txt'), 'utf-8').trim();
-    const actual = genDiff(filepath1, filepath2, 'json');
+  test('no formatter', async () => {
+    const expected = fs.readFileSync(path.resolve(process.cwd(), path.join('__fixtures__', 'result-stylish.txt')), 'utf-8').trim();
+    const actual = genDiff(filepath1, filepath2);
     expect(actual).toBe(expected);
   });
 });
