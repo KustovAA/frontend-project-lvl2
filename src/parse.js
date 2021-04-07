@@ -6,6 +6,12 @@ const parserMap = {
   yml: (file) => yaml.load(file),
 };
 
-const parse = (file, ext) => parserMap?.[ext]?.(file);
+const createParser = (ext) => {
+  if (!parserMap[ext]) {
+    throw new Error(`File with extension ${ext} can't be parsed`);
+  }
 
-export default parse;
+  return parserMap[ext];
+};
+
+export default createParser;

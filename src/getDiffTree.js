@@ -21,7 +21,7 @@ const getDiffTree = (obj1, obj2) => {
     }
 
     return {
-      key, type: 'changed', newValue: obj2[key], oldValue: obj1[key],
+      key, type: 'changed', value1: obj2[key], value2: obj1[key],
     };
   });
 };

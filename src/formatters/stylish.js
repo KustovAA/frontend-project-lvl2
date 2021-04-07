@@ -2,31 +2,32 @@ import _ from 'lodash';
 
 const indent = 2;
 
-const stylishMapping = {
-  unchanged: ({ key, value }, depth = indent) => `${' '.repeat(depth)}  ${key}: ${stylishMapping.transformValue(value, depth)}`,
-  changed: ({ key, newValue, oldValue }, depth = indent) => `${' '.repeat(depth)}- ${key}: ${stylishMapping.transformValue(oldValue, depth)}\n${' '.repeat(depth)}+ ${key}: ${stylishMapping.transformValue(newValue, depth)}`,
-  added: ({ key, value }, depth = indent) => `${' '.repeat(depth)}+ ${key}: ${stylishMapping.transformValue(value, depth)}`,
-  removed: ({ key, value }, depth = indent) => `${' '.repeat(depth)}- ${key}: ${stylishMapping.transformValue(value, depth)}`,
-  recursive: ({ key, keys }, depth = indent) => [`${' '.repeat(depth)}  ${key}: {`].concat(keys.map((node) => stylishMapping[node.type](node, depth + indent * 2))).concat([`${' '.repeat(depth)}  }`]).join('\n'),
-  transformValue: (value, depth = 0) => {
-    if (_.isPlainObject(value)) {
-      return ['{']
-        .concat(
-          _.keys(value)
-            .map((key) => stylishMapping.unchanged({ key, value: value[key] }, depth + indent * 2)),
-        )
-        .concat([`${' '.repeat(depth)}  }`])
-        .join('\n');
-    }
+const transformValue = (value, depth = 0, mapping) => {
+  if (_.isPlainObject(value)) {
+    return ['{']
+      .concat(
+        _.keys(value)
+          .map((key) => mapping.unchanged({ key, value: value[key] }, depth + indent * 2)),
+      )
+      .concat([`${' '.repeat(depth)}  }`])
+      .join('\n');
+  }
 
-    return value;
-  },
+  return value;
+};
+
+const stylishMapping = {
+  unchanged: ({ key, value }, depth = indent) => `${' '.repeat(depth)}  ${key}: ${transformValue(value, depth, stylishMapping)}`,
+  changed: ({ key, value1, value2 }, depth = indent) => `${' '.repeat(depth)}- ${key}: ${transformValue(value2, depth, stylishMapping)}\n${' '.repeat(depth)}+ ${key}: ${transformValue(value1, depth, stylishMapping)}`,
+  added: ({ key, value }, depth = indent) => `${' '.repeat(depth)}+ ${key}: ${transformValue(value, depth, stylishMapping)}`,
+  removed: ({ key, value }, depth = indent) => `${' '.repeat(depth)}- ${key}: ${transformValue(value, depth, stylishMapping)}`,
+  recursive: ({ key, keys }, depth = indent) => [`${' '.repeat(depth)}  ${key}: {`].concat(keys.map((node) => stylishMapping[node.type](node, depth + indent * indent))).concat([`${' '.repeat(depth)}  }`]).join('\n'),
 };
 
 const stylish = (actions) => ['{'].concat(actions.map(({
-  type, key, value, oldValue, newValue, keys,
+  type, key, value, value2, value1, keys,
 }) => stylishMapping[type]({
-  key, value, oldValue, newValue, keys, type,
+  key, value, value2, value1, keys, type,
 }))).concat(['}']).flat(Infinity).join('\n');
 
 export default stylish;
